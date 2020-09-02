@@ -7,10 +7,11 @@ int depthPin = 1;   //Pin for depth control pot will be Analog 1
 int rate;           //Integer variable to hold our rate value
 int depth;          //Integer variable to hold our depth value
 int pos;            //Integer variable to track our servo's current position
+int homePos = 90;   //Home position we want for the servo (will likely need to be found experimentally)
 
 void setup() {
   theServo.attach(9);   //Attach the servo object to pin 9
-  //theServo.write(90); //Sets initial servo position to 90 degrees (will need to be changed to whatever the servo's home is)
+  theServo.write(homePos); //Sets initial servo position to 90 degrees (will need to be changed to whatever the servo's home is)
 }
 
 void loop() {
@@ -25,13 +26,14 @@ void loop() {
    */
   rate = 1023 - analogRead(ratePin);
 
-  for (pos = 90; pos <= depth; pos++)   //Start at our current position and move by 1 degree until we reach our depth
+  //The range control still needs to tweaking
+  for (pos = homePos; pos <= depth; pos++)   //Start at our home position and move by 1 degree until we reach our depth
   {
     theServo.write(pos);  //Move the servo
     delay(rate);          //Wait for "rate" number of milliseconds between servo moves to create our overall rate
   }
   
-  for (pos = 90; pos >= (depth * -1); pos--)  //Start at our current position and move by 1 degree until we reach the opposite of depth
+  for (pos = homePos; pos >= depth; pos--)  //Start at our home position and move by 1 degree until we reach the opposite of depth
   {
     theServo.write(pos);  //Move the servo
     delay(rate);          //Wait for "rate" number of milliseconds between servo moves to create our overall rate
